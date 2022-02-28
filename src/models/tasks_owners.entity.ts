@@ -8,13 +8,13 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { PostsEntity } from './posts.entity';
+import { TasksEntity } from './tasks.entity';
 import { UsersEntity } from './users.entity';
 
-@Entity('posts_owners')
-export class PostsOwnersEntity {
+@Entity('tasks_owners')
+export class TasksOwnersEntity {
   @PrimaryGeneratedColumn('uuid')
-  idPostOwner: string;
+  idTaskOwner: string;
 
   @Column()
   idUser: string;
@@ -24,11 +24,11 @@ export class PostsOwnersEntity {
   ownerUser: UsersEntity;
 
   @Column()
-  idPost: string;
+  idTask: string;
 
-  @ManyToOne(() => PostsEntity, (post) => post.idPost, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'idPost' })
-  post: PostsEntity;
+  @ManyToOne(() => TasksEntity, (task) => task.idTask, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'idTask' })
+  post: TasksEntity;
 
   @CreateDateColumn({ type: 'timestamp' })
   createdAt?: Date;

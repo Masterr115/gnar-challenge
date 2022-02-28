@@ -6,11 +6,12 @@ import {
   JoinColumn,
   ManyToOne,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { PostsChildrenEntity } from './posts_children.entity';
-import { PostsOwnersEntity } from './posts_owners.entity';
+import { TasksChildrenEntity } from './tasks_children.entity';
+import { TasksOwnersEntity } from './tasks_owners.entity';
 import { UsersEntity } from './users.entity';
 
 export enum StatusEnum {
@@ -19,10 +20,10 @@ export enum StatusEnum {
   DONE = 'done',
 }
 
-@Entity('posts')
-export class PostsEntity {
+@Entity('tasks')
+export class TasksEntity {
   @PrimaryGeneratedColumn('uuid')
-  idPost: string;
+  idTask: string;
 
   @Column()
   title: string;
@@ -54,9 +55,12 @@ export class PostsEntity {
     this.createdAt = new Date();
   }
 
-  @OneToMany(() => PostsOwnersEntity, (postOwner) => postOwner.post)
-  owners: PostsOwnersEntity[];
+  @OneToMany(() => TasksOwnersEntity, (postOwner) => postOwner.post)
+  owners: TasksOwnersEntity[];
 
-  @OneToMany(() => PostsChildrenEntity, (postsChild) => postsChild.postParent)
-  children: PostsChildrenEntity[];
+  @OneToMany(() => TasksChildrenEntity, (TasksChild) => TasksChild.taskParent)
+  children: TasksChildrenEntity[];
+
+  @OneToOne(() => TasksChildrenEntity, (TasksChild) => TasksChild.taskChild)
+  parent: TasksChildrenEntity;
 }
