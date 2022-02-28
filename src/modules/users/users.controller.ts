@@ -1,8 +1,19 @@
-import { Body, Controller, Param, Patch, Post } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
+import { ApiOperation, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UsersCreateService } from '../../services/users/users.create.service';
+import { UsersFindService } from '../../services/users/users.find.service';
 import { UsersUpdateService } from '../../services/users/users.update.service';
+import { PaginationDto } from '../../util/dto/pagination.dto';
 import { CreateUserDto } from './dto/create/create-user.dto';
+import { FindAllUsersResponse } from './dto/find/find-all-users.response';
 import { UpdateUserDto } from './dto/update/update-user.dto';
 
 @ApiTags('Users')
@@ -11,6 +22,7 @@ export class UsersController {
   constructor(
     private usersCreateService: UsersCreateService,
     private usersUpdateService: UsersUpdateService,
+    private usersFindService: UsersFindService,
   ) {}
 
   @Post('/new')
@@ -38,5 +50,28 @@ export class UsersController {
     @Body() updateUserDto: UpdateUserDto,
   ) {
     return this.usersUpdateService.update(idUser, updateUserDto);
+  }
+
+  @Get('')
+  @ApiOperation({ summary: 'Get all Users' })
+  @ApiResponse({
+    status: 200,
+    description: 'The all users record',
+    type: FindAllUsersResponse,
+  })
+  @ApiQuery({
+    name: 'page',
+    required: false,
+  })
+  @ApiQuery({
+    name: 'limit',
+    required: false,
+  })
+  @ApiResponse({ status: 500, description: 'Internal server error' })
+  async getAllUsers(
+    @Query('page') page: number,
+    @Query('limit') limit: number,
+  ) {
+    return this.usersFindService.getAllUsers({ limit, page } as PaginationDto);
   }
 }
