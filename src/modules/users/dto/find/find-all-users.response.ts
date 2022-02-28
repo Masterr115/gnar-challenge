@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude, Expose, Type } from 'class-transformer';
 import { IsArray, ValidateNested } from 'class-validator';
-import { PaginationResponse } from 'src/util/dto/pagination.response';
+import { PaginationResponse } from '../../../../util/dto/pagination.response';
 
 @Exclude()
 export class FindAllUsersItemResponse {
